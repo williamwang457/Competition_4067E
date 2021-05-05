@@ -17,6 +17,14 @@ using namespace vex;
 // A global instance of competition
 competition Competition;
 
+motor motor_left (PORT1, ratio18_1);
+motor motor_right (PORT10, ratio18_1);
+
+controller Controller1;
+
+motor push_arm (PORT11, ratio36_1);
+
+float pusharmspeed = 100;
 // define your global instances of motors and other devices here
 
 /*---------------------------------------------------------------------------*/
@@ -65,6 +73,9 @@ void autonomous(void) {
 
 void usercontrol(void) {
   // User control code here, inside the loop
+    
+
+    
   while (1) {
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
@@ -74,6 +85,15 @@ void usercontrol(void) {
     // Insert user code here. This is where you use the joystick values to
     // update your motors, etc.
     // ........................................................................
+        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct), vex::velocityUnits::pct);
+        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct), vex::velocityUnits::pct);
+    
+    if (Controller1.ButtonA.pressing()){
+      push_arm.spin(fwd, pusharmspeed, pct);
+    }
+    else {
+      
+    }
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
