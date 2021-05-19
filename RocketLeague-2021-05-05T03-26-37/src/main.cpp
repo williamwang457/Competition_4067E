@@ -89,24 +89,23 @@ void usercontrol(void) {
         
     
       if (Controller1.Axis3.position() - Controller1.Axis2.position() > 50)  {
-        motorspeed = 90;
+        motorspeed = 0.85;
         //if bot joystick position turning, limit speed
       }
       else if (Controller1.Axis2.position() - Controller1.Axis3.position() > 50) {
-        motorspeed = 90;
+        motorspeed = 0.85;
         //if bot joystick position turning, limit spee (opposite)
       }
-      else {
-        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
-        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
+      else{
+        motorspeed = 1;
       }
-        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
-        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);   
+        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct)* motorspeed , vex::velocityUnits::pct);
+        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct)* motorspeed , vex::velocityUnits::pct);   
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
-  }
-}
+  }}
+
 
 //
 // Main will set up the competition functions and callbacks.
