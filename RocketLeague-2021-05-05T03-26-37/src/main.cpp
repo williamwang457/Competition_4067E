@@ -22,11 +22,10 @@ motor motor_right (PORT10, ratio18_1);
 
 controller Controller1;
 
-motor push_arm (PORT11, ratio36_1);
 
 
-
-float pusharmspeed = 20;
+float pusharmspeed = 100;
+float motorspeed = 100;
 // define your global instances of motors and other devices here
 
 /*---------------------------------------------------------------------------*/
@@ -87,18 +86,26 @@ void usercontrol(void) {
     // Insert user code here. This is where you use the joystick values to
     // update your motors, etc.
     // ........................................................................
-        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct), vex::velocityUnits::pct);
-        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct), vex::velocityUnits::pct);
+        
     
-
+      if (Controller1.Axis3.position() - Controller1.Axis2.position() > 50)  {
+        motorspeed = 90;
+        //if bot joystick position turning, limit speed
+      }
+      else if (Controller1.Axis2.position() - Controller1.Axis3.position() > 50) {
+        motorspeed = 90;
+        //if bot joystick position turning, limit spee (opposite)
+      }
+      else {
+        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
+        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
+      }
+        motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);
+        motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct) * motorspeed, vex::velocityUnits::pct);   
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
-}
-
-void pusharm() {
- 
 }
 
 //
@@ -109,10 +116,6 @@ int main() {
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
-  if(Controller1. ButtonA. pressing()){
-    push_arm.spin(fwd, pusharmspeed, pct)
-  }
-  
   // Run the pre-autonomous function.
   pre_auton();
 
