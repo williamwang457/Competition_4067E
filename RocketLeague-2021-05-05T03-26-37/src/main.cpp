@@ -19,6 +19,7 @@ competition Competition;
 
 motor motor_left (PORT1, ratio18_1);
 motor motor_right (PORT10, ratio18_1);
+motor motor_pusher (PORT2, ratio36_1);
 
 controller Controller1;
 
@@ -94,10 +95,19 @@ void usercontrol(void) {
       }
       else if (Controller1.Axis2.position() - Controller1.Axis3.position() > 50) {
         motorspeed = 0.85;
-        //if bot joystick position turning, limit spee (opposite)
+        //if bot joystick position turning, limit speed (opposite)
       }
       else{
         motorspeed = 1;
+      }
+
+      if (Controller1.ButtonB.pressing()){
+        motor_pusher.spin(fwd, pusharmspeed, pct);
+        //if button B is pressed, then start retracting arm
+      }
+      else {
+        motor_pusher.spin(fwd, 1, pct);
+        //passive when arm is not in use
       }
         motor_left.spin(vex::directionType::fwd, Controller1.Axis3.position(vex::percentUnits::pct)* motorspeed , vex::velocityUnits::pct);
         motor_right.spin(vex::directionType::rev, Controller1.Axis2.position(vex::percentUnits::pct)* motorspeed , vex::velocityUnits::pct);   
